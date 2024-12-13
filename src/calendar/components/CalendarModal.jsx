@@ -4,6 +4,10 @@ import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import es from 'date-fns/locale/es';
 import { useCalendarModal, useCalendarStore, useUiStore } from '../../hooks';
+import { differenceInSeconds } from 'date-fns';
+
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 registerLocale('es', es);
 
@@ -22,14 +26,14 @@ Modal.setAppElement('#root');
 
 export const CalendarModal = () => {
   const { isDateModalOpen, closeDateModal } = useUiStore();
-  const { activeEvent } = useCalendarStore();
+  const { activeEvent, startSavingEvent } = useCalendarStore();
 
   const {
     formValues,
     setFormValues,
+    setFormSubmitted,
     handleDateChange,
     handleInputChange,
-    handleSubmit,
     titleClass,
   } = useCalendarModal();
 
@@ -43,6 +47,26 @@ export const CalendarModal = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeEvent]);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setFormSubmitted(true);
+
+    const difference = differenceInSeconds(formValues.end, formValues.start);
+
+    if (isNaN(difference) || difference <= 0) {
+      Swal.fire('Fechas incorrectas', 'Revisar las fechas ingresadas', 'error');
+      return;
+    }
+
+    if (formValues.title.length <= 0) return;
+
+    console.log(formValues);
+
+    await startSavingEvent(formValues);
+    closeDateModal();
+    setFormSubmitted(false);
+  };
 
   return (
     <Modal
