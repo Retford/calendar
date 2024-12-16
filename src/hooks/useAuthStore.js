@@ -5,6 +5,7 @@ import {
   handleChecking,
   handleLogin,
   handleLogout,
+  handleLogoutCalendar,
 } from '../store';
 
 export const useAuthStore = () => {
@@ -74,6 +75,7 @@ export const useAuthStore = () => {
 
   const startLogout = () => {
     localStorage.clear();
+    dispatch(handleLogoutCalendar());
     dispatch(handleLogout());
   };
 
