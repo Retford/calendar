@@ -11,6 +11,7 @@ export const AppRouter = () => {
     checkAuthToken();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  
 
   if (status === 'checking') {
     return <h3>Cargando...</h3>;
