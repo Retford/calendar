@@ -4,6 +4,8 @@ import './styles.css';
 
 import { CalendarApp } from './CalendarApp.jsx';
 
+console.log(import.meta.env.VITE_API_URL);
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <CalendarApp />
